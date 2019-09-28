@@ -4,6 +4,8 @@ contract Meowbject {
     event MeowbjectAdded(string _message);
     event MeowbjectClaimed(string _message);
 
+    mapping(bytes32 => address) accounts;
+
     bytes32[] public qrs;
     mapping(bytes32 => address) qrOwnership;
     mapping(uint => bytes32) qrIds;
@@ -13,6 +15,15 @@ contract Meowbject {
     }
 
     Meowbjectributes[] meowbjectributes;
+
+    function addAccount(bytes32 _device, address _address) public {
+        require(accounts[_device] == address(0), "this device is already registered");
+        accounts[_device] = _address;
+    }
+
+    function checkAccount(bytes32 _device) public view returns (address account) {
+        return accounts[_device];
+    }
 
     function addQR(string memory _qr, string memory _tributes) public {
         bytes32 hashedQR = keccak256(abi.encodePacked(_qr));
@@ -27,6 +38,7 @@ contract Meowbject {
         bytes32 hashedQR = keccak256((abi.encodePacked(_qr)));
         bytes32 pQR = qrs[_id];
         require(pQR == hashedQR, "this is not a valid qr my dude");
+        require(qrOwnership[hashedQR] == address(0), "this qr code is taken");
         qrOwnership[hashedQR] = _sender;
         emit MeowbjectClaimed('QR claimed!');
     }
