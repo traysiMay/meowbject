@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { Fragment, useContext, useEffect, useRef, useState } from "react";
 import web3 from "web3";
 import { Web3Context } from "./Web3Context";
 import { isOwned } from "./constants";
@@ -6,17 +6,17 @@ import * as THREE from "three";
 import {
   Button,
   Claimtainer,
+  Owner,
+  Owntainer,
   FetchStatus,
+  Loadtainer,
   Logtainer,
   LogtainerTitle
 } from "./styles";
 function App() {
   const { checkOwner, checkQR, claimQR, state } = useContext(Web3Context);
-  // IF PROD 2 IF DEV 1
-  const qr = window.location.search.split("=")[1].split("-");
-  const qrIndex = process.env.NODE_ENV === "development" ? 1 : 2;
-  // const qr = window.location.pathname.split("/")[qrIndex].split("-");
-  // console.log(qr);
+  const qr = window.location.search ? window.location.search.split('?')[1].split("-") : [1, 'null_object'];
+  console.log(qr)
   const thereIsQR = qr[0] !== "" ? true : false;
   const color = useRef();
   const three = useRef();
@@ -28,22 +28,22 @@ function App() {
   useEffect(() => {
     console.log(thereIsQR);
     if (thereIsQR) checkOwner(web3.utils.keccak256(qr[1]));
-    return () => {};
+    return () => { };
   }, []);
   useEffect(() => {
     if (!thereIsQR) return;
     if (!state.tributes.tributes) return;
-    console.log(state.tributes.tributes);
     const scene = new THREE.Scene();
+    console.log("THREE")
     const halfHeight = window.innerHeight / 1.5;
     const camera = new THREE.PerspectiveCamera(
       75,
-      window.innerWidth / halfHeight,
+      window.innerWidth * .89 / halfHeight,
       0.1,
       1000
     );
     const renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setSize(window.innerWidth, halfHeight);
+    renderer.setSize(window.innerWidth * .89, halfHeight);
     renderer.setClearColor(0xffffff, 0);
     console.log(three.current);
     three.current.appendChild(renderer.domElement);
@@ -90,35 +90,41 @@ function App() {
   const {
     ownership: { owner },
     fetcher: { status, response },
-    log
+    log,
+    tributes
   } = state;
   if (!thereIsQR) return <div>nothing to see here</div>;
   return (
     <div>
       <FetchStatus>{status}</FetchStatus>
-
+      {!tributes.tributes && <Loadtainer>LOADING</Loadtainer>}
       <div id="three" ref={three}></div>
       {isOwned(owner) ? (
-        <div style={{ textAlign: "center", fontSize: "1.4rem" }}>
-          <div>claimed by:</div> <div style={{ fontSize: "1rem" }}>{owner}</div>
-        </div>
+        <Owntainer style={{ textAlign: "center", fontSize: "1.4rem" }}>
+          <div>claimed by:</div> <Owner>{owner}</Owner>
+        </Owntainer>
       ) : (
-        <Claimtainer>
-          <div>hello friend!</div>
-          <div>would you like to claim this meowbject?</div>
-          <Button onClick={() => claimQR(qr)}>claim</Button>
-        </Claimtainer>
-      )}
+          <Owntainer>
+            <div style={{
+              textDecoration: 'underline',
+              lineHeight: '3rem'
+            }}>hello friend!</div>
+            {status !== "FETCHING" ? (<div><div>would you like to claim this meowbject?</div>
+              <Button onClick={() => claimQR(qr)}>claim</Button></div>) : <div>CLAIMING...</div>}
+            {status === "ERROR" && <div style={{ padding: '2rem', color: 'red' }}>{response}</div>}
+          </Owntainer>
+        )}
       <Logtainer>
-        <LogtainerTitle style={{ borderBottom: "1px black solid" }}>
+        <LogtainerTitle>
           DEV_LOG
         </LogtainerTitle>
         {log.map((l, i) => (
           <div
             key={l + i}
             style={{
-              borderBottom: "1px black solid",
-              padding: "1rem 0rem 1rem 0rem"
+              borderBottom: "1px white solid",
+              padding: "1rem 0rem 1rem 0rem",
+              overflowWrap: "break-word",
             }}
           >
             {l}

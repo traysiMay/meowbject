@@ -3,14 +3,14 @@ import Fingerprint2 from "fingerprintjs2";
 export const DeviceContext = React.createContext();
 
 const DeviceProvider = ({ children }) => {
-  const [fingerPrint, setFingerPrint] = useState();
+  const [fingerPrint, setFingerPrint] = useState("crabmeepo");
   console.log(fingerPrint);
   useEffect(() => {
     const getFingerPrint = () => {
       if (window.requestIdleCallback) {
-        requestIdleCallback(function() {
-          Fingerprint2.get(function(components) {
-            var values = components.map(function(component) {
+        requestIdleCallback(function () {
+          Fingerprint2.get(function (components) {
+            var values = components.map(function (component) {
               return component.value;
             });
             var murmur = Fingerprint2.x64hash128(values.join(""), 31);
@@ -18,9 +18,9 @@ const DeviceProvider = ({ children }) => {
           });
         });
       } else {
-        setTimeout(function() {
-          Fingerprint2.get(function(components) {
-            var values = components.map(function(component) {
+        setTimeout(function () {
+          Fingerprint2.get(function (components) {
+            var values = components.map(function (component) {
               return component.value;
             });
             var murmur = Fingerprint2.x64hash128(values.join(""), 31);
@@ -29,7 +29,7 @@ const DeviceProvider = ({ children }) => {
         }, 500);
       }
     };
-    getFingerPrint();
+    // getFingerPrint();
   }, []);
 
   return (
