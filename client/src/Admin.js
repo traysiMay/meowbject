@@ -17,6 +17,8 @@ const Admin = () => {
   const shape = useRef();
   const color = useRef();
 
+  const imgQR = useRef();
+
   const [qr, setQR] = useState();
 
   const sendQR = () => {
@@ -55,6 +57,7 @@ const Admin = () => {
     feliximg.onload = function() {
       console.log("hi");
       ctx.drawImage(feliximg, 200, 200, 100, 100);
+      imgQR.current.src = canvas.toDataURL();
     };
   };
   useEffect(() => {
@@ -78,13 +81,37 @@ const Admin = () => {
           {state.fetcher.status === "FETCHING" ? "ADDING" : "CLICKY"}
         </Button>
       </FormContainer>
+      <img
+        style={{
+          width: "80%",
+          display: "block",
+          margin: "auto",
+          maxWidth: "420px"
+        }}
+        ref={imgQR}
+      ></img>
       {qr && (
         <canvas
           id="canvas"
           width={"500px"}
           height="500px"
-          style={{ maxWidth: "21rem", maxHeight: "21rem" }}
+          style={{ maxWidth: "21rem", maxHeight: "21rem", display: "none" }}
         ></canvas>
+      )}
+      {qr && (
+        <a
+          style={{
+            textAlign: "center",
+            margin: "auto",
+            display: "block",
+            fontSize: "30px",
+            textDecoration: "none",
+            color: "red"
+          }}
+          href={`${host}/?${state.qr}`}
+        >
+          {state.fetcher.status === "FETCHING" ? "ADDING..." : "CLICKY"}
+        </a>
       )}
       <div
         style={{
@@ -97,19 +124,6 @@ const Admin = () => {
       >
         {state.fetcher.status} - {JSON.stringify(state.fetcher.response)}
       </div>
-      <a
-        style={{
-          textAlign: "center",
-          margin: "auto",
-          display: "block",
-          fontSize: "30px",
-          textDecoration: "none",
-          color: "red"
-        }}
-        href={`${host}/?${state.qr}`}
-      >
-        {state.fetcher.status === "FETCHING" ? "ADDING..." : "CLICKY"}
-      </a>
     </div>
   );
 };
