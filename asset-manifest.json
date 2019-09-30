@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/static/js/main.34270776.chunk.js",
-    "main.js.map": "/static/js/main.34270776.chunk.js.map",
+    "main.js": "/static/js/main.01dbd53e.chunk.js",
+    "main.js.map": "/static/js/main.01dbd53e.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.9d4f7790.js",
     "runtime-main.js.map": "/static/js/runtime-main.9d4f7790.js.map",
     "static/js/2.b77c1974.chunk.js": "/static/js/2.b77c1974.chunk.js",
     "static/js/2.b77c1974.chunk.js.map": "/static/js/2.b77c1974.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.b3aa7dd3d6f7bb89d800a21d868179ca.js": "/precache-manifest.b3aa7dd3d6f7bb89d800a21d868179ca.js",
+    "precache-manifest.826340028e72d9ad7eacd9cdca4109d5.js": "/precache-manifest.826340028e72d9ad7eacd9cdca4109d5.js",
     "service-worker.js": "/service-worker.js",
     "static/media/felix.png": "/static/media/felix.462b44ea.png"
   }
