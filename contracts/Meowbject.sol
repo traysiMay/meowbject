@@ -2,6 +2,7 @@ pragma solidity >=0.4.21 <0.6.0;
 
 contract Meowbject {
     event MeowbjectAdded(string _message);
+    event MeowObjectAddedID(uint _id);
     event MeowbjectClaimed(string _message);
     event MeowError(string _message);
 
@@ -32,11 +33,13 @@ contract Meowbject {
         for (uint i; i < qrs.length; i++ ) {
             require(qrs[i] != hashedQR, "a qr by this name has already been created");
         }
-        qrIds[qrs.length] = hashedQR;
+        uint hashedQRID = qrs.length;
+        qrIds[hashedQRID] = hashedQR;
         qrs.push(hashedQR);
         Meowbjectributes memory _meowbjectributes = Meowbjectributes({shape: _shape, color: _color});
         meowbjectributes.push(_meowbjectributes);
         emit MeowbjectAdded("QR stored successfully!!");
+        emit MeowObjectAddedID(hashedQRID);
     }
 
     function claimQR(uint _id, string memory _qr, address _sender) public {

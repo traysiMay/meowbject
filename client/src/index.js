@@ -4,11 +4,12 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import DeviceProvider from "./DeviceContext";
 import Web3Provider from "./Web3Context";
+import Chooser from "./Chooser";
 
 ReactDOM.render(
   <DeviceProvider>
     <Web3Provider>
-      <App />
+      <Chooser />
     </Web3Provider>
   </DeviceProvider>,
   document.getElementById("root")

@@ -29,12 +29,14 @@ const SUCCESS = "SUCCESS";
 const ERROR = "ERROR";
 const OWNER = "OWNER";
 const TRIBUTES = "TRIBUTES";
+const PRINT_QR = "PRINT_QR";
 window.web3 = web3;
 window.meow = meowb;
 const initialState = {
   fetcher: { response: null, status: null },
   ownership: { owner: null },
   tributes: { tributes: null },
+  qr: null,
   log: []
 };
 
@@ -64,6 +66,10 @@ const reducer = (state, action) => {
     case TRIBUTES: {
       return { ...state, tributes: { tributes } };
     }
+    case PRINT_QR: {
+      console.log(response);
+      return { ...state, qr: response };
+    }
     default:
       return state;
   }
@@ -72,9 +78,10 @@ const reducer = (state, action) => {
 const Web3Provider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [deviceAddress, setDeviceAddress] = useState();
-  const fingerPrint = useContext(DeviceContext);
+  const { fingerPrint } = useContext(DeviceContext);
 
   useEffect(() => {
+    console.log(fingerPrint);
     if (fingerPrint) {
       const checkAccount = async () => {
         const hashedFP = web3.utils.keccak256(fingerPrint);
@@ -172,6 +179,29 @@ const Web3Provider = ({ children }) => {
     }
   };
 
+  const addQR = async (qr, shape, color) => {
+    dispatch({ type: FETCHING, what: "QRADD" });
+    dispatch({ type: PRINT_QR, response: null });
+
+    try {
+      console.log(deviceAddress);
+      const account = await web3.eth.getAccounts();
+      console.log(qr, shape, color);
+      const response = await meowb.methods
+        .addQR(qr, shape, color)
+        .send({ from: account[0], gas: 3000000 });
+      dispatch({ type: SUCCESS, response: response, what: "QRADD" });
+      const QRID = response.events.MeowObjectAddedID.returnValues[0];
+      dispatch({ type: "PRINT_QR", response: `${QRID}-${qr}` });
+    } catch (err) {
+      dispatch({
+        type: ERROR,
+        response: "something went wrong, this QR probably already exists",
+        what: "QRADD"
+      });
+    }
+  };
+
   const getTributes = async () => {
     dispatch({ type: FETCHING, what: "ATTRIBUTES" });
     const _id = getID();
@@ -186,7 +216,9 @@ const Web3Provider = ({ children }) => {
   };
 
   return (
-    <Web3Context.Provider value={{ state, dispatch, checkOwner, claimQR }}>
+    <Web3Context.Provider
+      value={{ state, dispatch, checkOwner, claimQR, addQR }}
+    >
       {children}
     </Web3Context.Provider>
   );

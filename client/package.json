@@ -2,9 +2,11 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://traysimay.github.io/meowbject",
+  "homepage": "https://meowobjects.com",
   "dependencies": {
+    "canvas": "^2.6.0",
     "gh-pages": "^2.1.1",
+    "qrcode": "^1.4.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.2",
@@ -14,8 +16,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "wbuild": "react-scripts build && copy build\\index.html build\\404.html ",
-    "build": "react-scripts build && cp build/index.html build/404.html ",
+    "build": "react-scripts build && copy build\\index.html build\\404.html && copy CNAME build\\CNAME",
+    "mbuild": "react-scripts build && cp build/index.html build/404.html ",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
