@@ -28,7 +28,6 @@ function App() {
   const qr = window.location.search
     ? window.location.search.split("?")[1].split("-")
     : [1, "null_object"];
-  console.log(qr);
   const thereIsQR = qr[0] !== "" ? true : false;
   const color = useRef();
   const three = useRef();
@@ -38,7 +37,6 @@ function App() {
   }, [state.tributes]);
   const getColor = () => color.current;
   useEffect(() => {
-    console.log(thereIsQR);
     if (thereIsQR) checkOwner(web3.utils.keccak256(qr[1]));
     return () => {};
   }, []);
@@ -46,7 +44,6 @@ function App() {
     if (!thereIsQR) return;
     if (!state.tributes.tributes) return;
     const scene = new THREE.Scene();
-    console.log("THREE");
     const halfHeight = window.innerHeight / 2;
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -57,7 +54,6 @@ function App() {
     const renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setSize(window.innerWidth * 0.8, halfHeight);
     renderer.setClearColor(0xffffff, 0);
-    console.log(three.current);
     three.current.appendChild(renderer.domElement);
 
     const { shape } = state.tributes.tributes;
@@ -120,6 +116,9 @@ function App() {
       {!tributes.tributes && <Loadtainer>LOADING</Loadtainer>}
       <div id="three" ref={three}></div>
       <Bottom>
+        {qr[1] === "null_object" && (
+          <Owntainer>This is not a valid URL</Owntainer>
+        )}
         {isOwned(owner) ? (
           <Owntainer style={{ textAlign: "center", fontSize: "1.4rem" }}>
             <div>claimed by:</div> <Owner>{owner}</Owner>

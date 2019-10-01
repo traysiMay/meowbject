@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useReducer, useState } from "react";
 import Web3 from "web3";
 import Meowbject from "./contracts/Meowbject";
 import { DeviceContext } from "./DeviceContext";
-import { GANACHE_ID, getQR, getID, KALE_ID } from "./constants";
+import { GANACHE_ID, getID, KALE_ID } from "./constants";
 
 export const Web3Context = React.createContext();
 
@@ -18,7 +18,6 @@ const blockPoint = `https://${KALE_A}:${KALE_B}@${RPC}`;
 
 //const address = Meowbject.networks[GANACHE_ID].address;
 const address = Meowbject.networks[KALE_ID].address;
-console.log("contract address", address);
 const provider = new Web3.providers.HttpProvider(blockPoint);
 const web3 = new Web3(provider);
 const meowb = new web3.eth.Contract(Meowbject.abi, address);
@@ -67,7 +66,6 @@ const reducer = (state, action) => {
       return { ...state, tributes: { tributes } };
     }
     case PRINT_QR: {
-      console.log(response);
       return { ...state, qr: response };
     }
     default:
@@ -81,7 +79,6 @@ const Web3Provider = ({ children }) => {
   const { fingerPrint } = useContext(DeviceContext);
 
   useEffect(() => {
-    console.log(fingerPrint);
     if (fingerPrint) {
       const checkAccount = async () => {
         const hashedFP = web3.utils.keccak256(fingerPrint);
@@ -116,9 +113,7 @@ const Web3Provider = ({ children }) => {
               tx,
               newAddress.privateKey
             );
-            const tranny = await web3.eth.sendSignedTransaction(
-              signedT.rawTransaction
-            );
+            await web3.eth.sendSignedTransaction(signedT.rawTransaction);
             dispatch({
               type: SUCCESS,
               response: newAddress.address,
@@ -140,7 +135,6 @@ const Web3Provider = ({ children }) => {
   }, [fingerPrint]);
 
   const checkOwner = async qr => {
-    console.log("check owner");
     dispatch({ type: FETCHING, what: "OWNER" });
     try {
       const response = await meowb.methods.checkOwner(qr).call();
@@ -171,7 +165,6 @@ const Web3Provider = ({ children }) => {
         dispatch({ type: OWNER, owner: deviceAddress });
       }
     } catch (error) {
-      console.log(error.message);
       dispatch({
         type: ERROR,
         response: "this code is already claimed or does not exist"
@@ -184,9 +177,7 @@ const Web3Provider = ({ children }) => {
     dispatch({ type: PRINT_QR, response: null });
 
     try {
-      console.log(deviceAddress);
       const account = await web3.eth.getAccounts();
-      console.log(qr, shape, color);
       const response = await meowb.methods
         .addQR(qr, shape, color)
         .send({ from: account[0], gas: 3000000 });
@@ -207,7 +198,6 @@ const Web3Provider = ({ children }) => {
     const _id = getID();
     try {
       const tributes = await meowb.methods.getTributes(_id).call();
-      console.log(tributes);
       dispatch({ type: SUCCESS, response: tributes, what: "ATTRIBUTES" });
       dispatch({ type: TRIBUTES, tributes });
     } catch (error) {

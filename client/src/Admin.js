@@ -4,7 +4,7 @@ import { DeviceContext } from "./DeviceContext";
 import { Web3Context } from "./Web3Context";
 import QRCode from "qrcode";
 import felix from "./felix.png";
-
+import loading from "./loading.gif";
 const host =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
@@ -17,7 +17,7 @@ const Admin = () => {
   const shape = useRef();
   const color = useRef();
 
-  const imgQR = useRef();
+  const [img, setImg] = useState();
 
   const [qr, setQR] = useState();
 
@@ -43,21 +43,21 @@ const Admin = () => {
   };
 
   const drawQR = async () => {
-    console.log("drawing qr");
     const qr = await makeQR(`${host}/?${state.qr}`);
     const canvas = document.getElementById("canvas");
     const qrImg = new Image();
     const feliximg = new Image();
     const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     qrImg.src = qr;
-    qrImg.onload = () => ctx.drawImage(qrImg, 0, 0, 500, 500);
-
-    feliximg.src = felix;
-    feliximg.onload = function() {
-      console.log("hi");
-      ctx.drawImage(feliximg, 200, 200, 100, 100);
-      imgQR.current.src = canvas.toDataURL();
+    qrImg.onload = () => {
+      ctx.drawImage(qrImg, 0, 0, 500, 500);
+      feliximg.src = felix;
+      feliximg.onload = function() {
+        ctx.drawImage(feliximg, 200, 200, 100, 100);
+        setImg(canvas.toDataURL());
+      };
     };
   };
   useEffect(() => {
@@ -86,9 +86,10 @@ const Admin = () => {
           width: "80%",
           display: "block",
           margin: "auto",
-          maxWidth: "420px"
+          maxWidth: "420px",
+          boxShadow: "12px 15px black"
         }}
-        ref={imgQR}
+        src={state.fetcher.status === "FETCHING" ? loading : img}
       ></img>
       {qr && (
         <canvas

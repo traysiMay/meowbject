@@ -3,7 +3,7 @@ import Fingerprint2 from "fingerprintjs2";
 export const DeviceContext = React.createContext();
 
 const DeviceProvider = ({ children }) => {
-  const [fingerPrint, setFingerPrint] = useState("crabmeepo");
+  const [fingerPrint, setFingerPrint] = useState();
   const [admin, setAdmin] = useState(false);
   useEffect(() => {
     const getFingerPrint = () => {
