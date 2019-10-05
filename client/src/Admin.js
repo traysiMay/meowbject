@@ -3,7 +3,7 @@ import { AdminTag, FormContainer, InputField, Button, QR } from "./styles";
 import { DeviceContext } from "./DeviceContext";
 import { Web3Context } from "./Web3Context";
 import QRCode from "qrcode";
-import felix from "./felix.png";
+import felix from "./felix_grey.png";
 import loading from "./loading.gif";
 const host =
   process.env.NODE_ENV === "development"
@@ -31,7 +31,7 @@ const Admin = () => {
     var opts = {
       errorCorrectionLevel: "H",
       type: "image/jpeg",
-      color: { light: "#ff4500" },
+      color: { light: "#FFFFFF" },
       width: 400,
       rendererOpts: {
         quality: 1
@@ -54,7 +54,7 @@ const Admin = () => {
     qrImg.onload = () => {
       ctx.drawImage(qrImg, 0, 0, 500, 500);
       feliximg.src = felix;
-      feliximg.onload = function() {
+      feliximg.onload = function () {
         ctx.drawImage(feliximg, 200, 200, 100, 100);
         setImg(canvas.toDataURL());
       };

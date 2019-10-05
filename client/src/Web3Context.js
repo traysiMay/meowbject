@@ -200,6 +200,7 @@ const Web3Provider = ({ children }) => {
       const tributes = await meowb.methods.getTributes(_id).call();
       dispatch({ type: SUCCESS, response: tributes, what: "ATTRIBUTES" });
       dispatch({ type: TRIBUTES, tributes });
+      return tributes
     } catch (error) {
       dispatch({ type: ERROR, response: error.message });
     }
@@ -207,7 +208,7 @@ const Web3Provider = ({ children }) => {
 
   return (
     <Web3Context.Provider
-      value={{ state, dispatch, checkOwner, claimQR, addQR }}
+      value={{ state, dispatch, checkOwner, claimQR, addQR, getTributes }}
     >
       {children}
     </Web3Context.Provider>
