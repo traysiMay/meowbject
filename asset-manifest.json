@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.js": "/static/js/main.c4a891c3.chunk.js",
-    "main.js.map": "/static/js/main.c4a891c3.chunk.js.map",
+    "main.js": "/static/js/main.03c96bbf.chunk.js",
+    "main.js.map": "/static/js/main.03c96bbf.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.9d4f7790.js",
     "runtime-main.js.map": "/static/js/runtime-main.9d4f7790.js.map",
-    "static/js/2.204d3de4.chunk.js": "/static/js/2.204d3de4.chunk.js",
-    "static/js/2.204d3de4.chunk.js.map": "/static/js/2.204d3de4.chunk.js.map",
+    "static/js/2.67385616.chunk.js": "/static/js/2.67385616.chunk.js",
+    "static/js/2.67385616.chunk.js.map": "/static/js/2.67385616.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.10297d4ba9dacb103e48485f93099673.js": "/precache-manifest.10297d4ba9dacb103e48485f93099673.js",
+    "precache-manifest.aa77a03af872f4c0d629c9d26d763f2f.js": "/precache-manifest.aa77a03af872f4c0d629c9d26d763f2f.js",
     "service-worker.js": "/service-worker.js",
-    "static/media/felix.png": "/static/media/felix.462b44ea.png",
+    "static/media/2.png": "/static/media/2.10ca7537.png",
+    "static/media/felix_grey.png": "/static/media/felix_grey.1be63f69.png",
     "static/media/loading.gif": "/static/media/loading.77583f10.gif"
   }
 }
